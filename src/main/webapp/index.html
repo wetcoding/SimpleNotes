@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-        <h1>Hello World!3</h1>
-    </body>
+<head>
+    <meta charset="utf-8"/>
+    <title>SimpleNotes</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+
+<button id="btnAddNote">Добавить заметку</button>
+
+<button id="btnOpenNote">Открыть существующую</button>
+
+
+<div id="myModal" class="modal"> 
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Note</h2>
+    </div>
+    <div class="modal-body">
+		<p><b>Title:</b><br>
+		<input id="inputTitle" type="text" size="20">
+		<p>Text<Br>
+		<textarea id="inputText" cols="40" rows="3"></textarea></p>
+    </div>
+    <div class="modal-footer">
+      <button id="btnAction">actionButton</button>
+    </div>
+  </div>
+
+</div>
+
+<script language="javascript" src="js/script.js" type="text/javascript"></script>
+</body>
 </html>
