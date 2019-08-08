@@ -18,10 +18,24 @@ function serverConnectFunc(serverUrl,data) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var json = JSON.parse(xhr.responseText);
-            for(var i=0;i<json.length;i++){
-                console.log(json[i].title);
-                console.log(json[i].text);
+            
+            switch (json.status){
+                case "notes":
+                    for(var i in json.notes){
+                        console.log(json.notes[i].title);
+                        console.log(json.notes[i].text);
+                    }
+                    alert("Получено "+json.notes.length);
+                    break;
+                case "success":
+                    alert(json.message);
+                    showAllNames();
+                    break;
+                case "error":    
+                    alert(json.message);
+                    break;
             }
+                
         }
     };
     xhr.send(data);
@@ -47,7 +61,7 @@ btnAdd.onclick = function() {
     inputText.disabled = false;
     
     var jsonData = new Object();
-    jsonData.command = "5";
+    jsonData.command = "1";
 
     serverConnectFunc(window.location.href,JSON.stringify(jsonData));
 };
@@ -60,7 +74,7 @@ btnOpen.onclick = function() {
     inputText.disabled = true;
     
     var jsonData = new Object();
-    jsonData.command = "10";
+    jsonData.command = "2";
 
     serverConnectFunc(window.location.href,JSON.stringify(jsonData));
 };

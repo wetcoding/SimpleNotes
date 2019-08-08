@@ -56,30 +56,44 @@ public class MainServlet extends HttpServlet{
 
             int command = jsonObject.getInt("command");
             
+            resp.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = resp.getWriter();
+            JSONObject jsonRespounce= new JSONObject();
+            //command - 0-getAll, 1-add, 2-delete
             switch (command){
-                case 0:
-                    
-                    resp.setContentType("text/html;charset=UTF-8");
-                    PrintWriter out = resp.getWriter();
-                  
-                    ArrayList<Note> result=DatabaseClient.getAllNotes(command);
-                    
+                case 0:                  
+                    ArrayList<Note> result=DatabaseClient.getAllNotes();                    
+                    jsonRespounce.put("status","notes");
+
                     JSONArray jsonArray=new JSONArray();
-                    
                     for(int i=0;i<result.size();i++){
                         JSONObject obj = new JSONObject();
                         obj.put("title", result.get(i).getTitle());
                         obj.put("text", result.get(i).getText());
                         jsonArray.put(obj);
                     }
-                    
-                   
-                    out.println(jsonArray.toString());
-            }
 
+                    jsonRespounce.put("notes", jsonArray);
+                    break;
+                case 1:
+                    jsonRespounce.put("status","success");
+                    jsonRespounce.put("message","Success operation");
+                    break;
+                case 2:
+                    jsonRespounce.put("status","error");
+                    jsonRespounce.put("message","Some bad error");
+                    break;    
+                default:
+                    jsonRespounce.put("status", "error");
+                    jsonRespounce.put("message","Unknown command");
+                    break;
+                    
+            }
             
+                out.println(jsonRespounce.toString());
             
-        } catch (Exception e) {
+            }
+        catch (Exception e) {
             System.out.println(e.toString());
         }
     }
