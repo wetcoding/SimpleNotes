@@ -8,6 +8,7 @@ package com.mycompany.simplenotes.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -17,9 +18,10 @@ import java.util.ArrayList;
  */
 public class DatabaseClient {
     
-    static Connection connection = null;
+    private static Connection connection = null;
+    private static boolean isConnected=false;
     
-    private static void connect(){
+    public static boolean connect(){
        try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/notes_database"+
@@ -30,27 +32,31 @@ public class DatabaseClient {
                 "&useLegacyDatetimeCode=false"+
                 "&amp"+
                 "&serverTimezone=UTC";
-            connection = DriverManager.getConnection(url, "root", "root");           
+            connection = DriverManager.getConnection(url, "root", "root");
+            isConnected=true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            isConnected=false;
         }
+       
+       return isConnected;
     }
     
-    public static ArrayList<Note> getAllNotes(){
+    public static ArrayList<Note> getNotes(String key){
+              
+        ArrayList<Note> result=new ArrayList<>();
         
-        
-        
-        ArrayList<Note> result=new ArrayList<Note>();
-        
+        if(!isConnected)
+            return result;
        
-        try{
-            connect();
+        try{            
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Notes");
+            ResultSet rs = statement.executeQuery("SELECT * FROM notes WHERE title LIKE '%"+key+"%' OR note LIKE '%"+key+"%';");
             while (rs.next()) {
-                result.add(new Note(rs.getString("title"),rs.getString("note")));
+                result.add(new Note(rs.getInt("id"),rs.getString("title"),rs.getString("note")));
             }
 
+            isConnected=false;
             rs.close();
             statement.close();
             connection.close();
@@ -62,5 +68,31 @@ public class DatabaseClient {
         
         
         return result;
+    }
+    
+    public static boolean addNote(String title,String note){
+        try{
+            Statement statement = connection.createStatement();
+            String query = "INSERT INTO notes (title, note) VALUES ('"+title+"', '"+note+"');";
+            statement.executeUpdate(query);
+            return true;
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    
+    public static boolean deleteNote(int id){
+        try{
+            Statement statement = connection.createStatement();
+            String query = "DELETE FROM notes WHERE id="+String.valueOf(id)+";";
+            statement.executeUpdate(query);
+            return true;
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

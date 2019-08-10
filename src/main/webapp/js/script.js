@@ -22,6 +22,7 @@ function serverConnectFunc(serverUrl,data) {
             switch (json.status){
                 case "notes":
                     for(var i in json.notes){
+                        console.log(json.notes[i].id);
                         console.log(json.notes[i].title);
                         console.log(json.notes[i].text);
                     }
@@ -45,8 +46,9 @@ function showAllNames()
 {
     var jsonData = new Object();
     jsonData.command = "0";
+    jsonData.key="";    
 
-    serverConnectFunc(window.location.href,JSON.stringify(jsonData));
+   // serverConnectFunc(window.location.href,JSON.stringify(jsonData));
 }
 
 window.onload=function () {
@@ -63,7 +65,7 @@ btnAdd.onclick = function() {
     var jsonData = new Object();
     jsonData.command = "1";
 
-    serverConnectFunc(window.location.href,JSON.stringify(jsonData));
+   // serverConnectFunc(window.location.href,JSON.stringify(jsonData));
 };
 
 btnOpen.onclick = function() {
@@ -76,7 +78,7 @@ btnOpen.onclick = function() {
     var jsonData = new Object();
     jsonData.command = "2";
 
-    serverConnectFunc(window.location.href,JSON.stringify(jsonData));
+  //  serverConnectFunc(window.location.href,JSON.stringify(jsonData));
 };
 
 

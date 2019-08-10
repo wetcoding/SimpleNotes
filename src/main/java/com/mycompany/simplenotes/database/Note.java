@@ -10,14 +10,19 @@ package com.mycompany.simplenotes.database;
  * @author Mashakaev
  */
 public class Note {
+    int id;
     String title;
     String text;
     
-    public Note (String title,String text){
+    public Note (int id,String title,String text){
+        this.id=id;
         this.title=title;
         this.text=text;
     }
 
+    public int getId(){
+        return id;
+    }
     public String getTitle() {
         return title;
     }

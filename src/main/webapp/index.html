@@ -4,14 +4,27 @@
     <meta charset="utf-8"/>
     <title>SimpleNotes</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
+	
+	
 </head>
 <body>
 
-<button id="btnAddNote">Добавить заметку</button>
 
-<button id="btnOpenNote">Открыть существующую</button>
+<div id="pageTitle">
+	<p>Simple Notes</p>
+	<div id="searchContainer">
+		<input id="inputSearch" type="text" placeholder="Search.." size="20">
+		<button id="btnSearch">Search</button>
+		<button id="btnClearSearch">Clear</button>
+		<button id="btnClearSearch" onclick="createElem(1)">AddNote</button>
+	</div>
+	
+</div>
 
+<div id="itemsHolder">
+
+</div>
 
 <div id="myModal" class="modal"> 
   <div class="modal-content">
@@ -33,5 +46,6 @@
 </div>
 
 <script language="javascript" src="js/script.js" type="text/javascript"></script>
+<script language="javascript" src="js/script2.js" type="text/javascript"></script>
 </body>
 </html>

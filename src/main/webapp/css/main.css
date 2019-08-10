@@ -1,13 +1,41 @@
-#btnAddNote {
-  background-color: #9C27B0;
-  color: white;
-  padding: 12px 16px;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  width: 180px;
+body{
+    background-color: #f6f6f6; /* Цвет фона веб-страницы */
+} 
+   
+#pageTitle{
+    margin: 0 auto;
+    background-color: #ff7372;
+    width: 50%;
+	height: 150px; 
+	text-align: center;
+	font-size: xx-large;
+	padding-top: 10px;
+	color:white;
 }
+
+#searchContainer{
+	display: flex;
+	flex-direction: row;
+	padding-left:10px;
+}
+
+#itemsHolder{
+	margin: 0 auto;
+    width: 50%;
+	padding-top: 10px;
+}
+
+
+.note{
+	background-color: #eae9e7;
+	margin-top: 10px;
+	cursor: pointer;
+	padding: 10px;
+	width:auto;
+}
+
+
+
 
 
 .modal {

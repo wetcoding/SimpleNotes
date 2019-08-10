@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -52,46 +53,73 @@ public class MainServlet extends HttpServlet{
         
         
         try {
-            JSONObject jsonObject = new JSONObject(jb.toString());
+            JSONObject jsonRequest = new JSONObject(jb.toString());//!
 
-            int command = jsonObject.getInt("command");
+            
+            int command = jsonRequest.getInt("command");//
             
             resp.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = resp.getWriter();
-            JSONObject jsonRespounce= new JSONObject();
-            //command - 0-getAll, 1-add, 2-delete
-            switch (command){
-                case 0:                  
-                    ArrayList<Note> result=DatabaseClient.getAllNotes();                    
-                    jsonRespounce.put("status","notes");
+            PrintWriter out = resp.getWriter();//
+            JSONObject jsonRespounce= new JSONObject();//
+            
+            if(DatabaseClient.connect()){
+                //command - 0-getAll, 1-add, 2-delete
+                switch (command){
+                    case 0: 
+                        String key=jsonRequest.getString("key");
+                        ArrayList<Note> result=DatabaseClient.getNotes(key);                    
+                        jsonRespounce.put("status","notes");
 
-                    JSONArray jsonArray=new JSONArray();
-                    for(int i=0;i<result.size();i++){
-                        JSONObject obj = new JSONObject();
-                        obj.put("title", result.get(i).getTitle());
-                        obj.put("text", result.get(i).getText());
-                        jsonArray.put(obj);
+                        JSONArray jsonArray=new JSONArray();
+                        for(int i=0;i<result.size();i++){
+                            JSONObject obj = new JSONObject();
+                            obj.put("id", result.get(i).getId());
+                            obj.put("title", result.get(i).getTitle());
+                            obj.put("text", result.get(i).getText());
+                            jsonArray.put(obj);
+                        }
+
+                        jsonRespounce.put("notes", jsonArray);
+                        break;
+                    case 1:
+                        String title=jsonRequest.getString("title");
+                        String note=jsonRequest.getString("note");
+                        if (DatabaseClient.addNote(title,note)){
+                            jsonRespounce.put("status","success");
+                            jsonRespounce.put("message","Success added");
+                        }
+                        else{
+                            jsonRespounce.put("status","error");
+                            jsonRespounce.put("message","Error while adding");
+                        }
+                        
+                        break;
+                    case 2:
+                        int id=jsonRequest.getInt("id");
+                        if(DatabaseClient.deleteNote(id)){
+                            jsonRespounce.put("status","success");
+                            jsonRespounce.put("message","Success deleted");
+                        }
+                        else
+                        {
+                            jsonRespounce.put("status","error");
+                            jsonRespounce.put("message","Error while deleting");
+                        }
+                        
+                        break;    
+                    default:
+                        jsonRespounce.put("status", "error");
+                        jsonRespounce.put("message","Unknown command");
+                        break; 
                     }
-
-                    jsonRespounce.put("notes", jsonArray);
-                    break;
-                case 1:
-                    jsonRespounce.put("status","success");
-                    jsonRespounce.put("message","Success operation");
-                    break;
-                case 2:
-                    jsonRespounce.put("status","error");
-                    jsonRespounce.put("message","Some bad error");
-                    break;    
-                default:
-                    jsonRespounce.put("status", "error");
-                    jsonRespounce.put("message","Unknown command");
-                    break;
                     
-            }
+                }
+                else{
+                    jsonRespounce.put("status","error");
+                    jsonRespounce.put("message","Can not connect to database");
+                }
             
                 out.println(jsonRespounce.toString());
-            
             }
         catch (Exception e) {
             System.out.println(e.toString());
