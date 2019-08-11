@@ -1,0 +1,30 @@
+#notes-container{
+    margin: 0 auto;
+    /*width: 400px;*/
+    padding-top: 50px;
+    padding-bottom: 50px;
+    overflow:auto;
+    /*background-color: #e83b3b;*/
+}
+
+.note-titled{
+    background-color: #f9f8a6;
+    margin: 0 auto;
+    margin-top: 30px;
+    cursor: pointer;
+    width: 400px;
+    padding: 10px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.2),0 6px 10px 0 rgba(0,0,0,0.19);
+    font-weight: bold;
+}
+
+.note{
+    background-color: #acf9a6;
+    margin: 0 auto;
+    margin-top: 30px;
+    cursor: pointer;
+    width: 400px;
+    padding: 10px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.2),0 6px 10px 0 rgba(0,0,0,0.19);
+}
+

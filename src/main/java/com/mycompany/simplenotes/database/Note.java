@@ -12,12 +12,12 @@ package com.mycompany.simplenotes.database;
 public class Note {
     int id;
     String title;
-    String text;
+    String note;
     
-    public Note (int id,String title,String text){
+    public Note (int id,String title,String note){
         this.id=id;
         this.title=title;
-        this.text=text;
+        this.note=note;
     }
 
     public int getId(){
@@ -27,8 +27,8 @@ public class Note {
         return title;
     }
 
-    public String getText() {
-        return text;
+    public String getNote() {
+        return note;
     }
     
     

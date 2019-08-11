@@ -10,6 +10,7 @@ import com.mycompany.simplenotes.database.Note;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,6 +43,8 @@ public class MainServlet extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         StringBuilder jb = new StringBuilder();
         String line = null;
+        
+        req.setCharacterEncoding("UTF-8");
 
         try {
             BufferedReader reader = req.getReader();
@@ -66,7 +69,7 @@ public class MainServlet extends HttpServlet{
                 //command - 0-getAll, 1-add, 2-delete
                 switch (command){
                     case 0: 
-                        String key=jsonRequest.getString("key");
+                        String key=URLDecoder.decode(jsonRequest.getString("key"), "ISO-8959-1");
                         ArrayList<Note> result=DatabaseClient.getNotes(key);                    
                         jsonRespounce.put("status","notes");
 
@@ -75,7 +78,7 @@ public class MainServlet extends HttpServlet{
                             JSONObject obj = new JSONObject();
                             obj.put("id", result.get(i).getId());
                             obj.put("title", result.get(i).getTitle());
-                            obj.put("text", result.get(i).getText());
+                            obj.put("note", result.get(i).getNote());
                             jsonArray.put(obj);
                         }
 
@@ -86,7 +89,7 @@ public class MainServlet extends HttpServlet{
                         String note=jsonRequest.getString("note");
                         if (DatabaseClient.addNote(title,note)){
                             jsonRespounce.put("status","success");
-                            jsonRespounce.put("message","Success added");
+                            jsonRespounce.put("message","Added successfully");
                         }
                         else{
                             jsonRespounce.put("status","error");
@@ -98,7 +101,7 @@ public class MainServlet extends HttpServlet{
                         int id=jsonRequest.getInt("id");
                         if(DatabaseClient.deleteNote(id)){
                             jsonRespounce.put("status","success");
-                            jsonRespounce.put("message","Success deleted");
+                            jsonRespounce.put("message","Deleted successfully");
                         }
                         else
                         {

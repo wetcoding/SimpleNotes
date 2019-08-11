@@ -7,6 +7,7 @@ package com.mycompany.simplenotes.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,15 +51,18 @@ public class DatabaseClient {
             return result;
        
         try{            
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM notes WHERE title LIKE '%"+key+"%' OR note LIKE '%"+key+"%';");
+            String query="SELECT * FROM notes WHERE title LIKE ? OR note LIKE ?;";
+            PreparedStatement preparedStatement=connection.prepareStatement(query);
+            preparedStatement.setString(1, "%"+key+"%");
+            preparedStatement.setString(2, "%"+key+"%");
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 result.add(new Note(rs.getInt("id"),rs.getString("title"),rs.getString("note")));
             }
 
             isConnected=false;
             rs.close();
-            statement.close();
+            preparedStatement.close();
             connection.close();
 
         }
@@ -72,9 +76,11 @@ public class DatabaseClient {
     
     public static boolean addNote(String title,String note){
         try{
-            Statement statement = connection.createStatement();
-            String query = "INSERT INTO notes (title, note) VALUES ('"+title+"', '"+note+"');";
-            statement.executeUpdate(query);
+            String query = "INSERT INTO notes (title, note) VALUES (?,?);";
+            PreparedStatement preparedStatement=connection.prepareStatement(query);
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2,note);
+            preparedStatement.executeUpdate();
             return true;
         }
         catch(SQLException e){
@@ -85,9 +91,10 @@ public class DatabaseClient {
     
     public static boolean deleteNote(int id){
         try{
-            Statement statement = connection.createStatement();
-            String query = "DELETE FROM notes WHERE id="+String.valueOf(id)+";";
-            statement.executeUpdate(query);
+            String query = "DELETE FROM notes WHERE id=?;";
+            PreparedStatement preparedStatement=connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
             return true;
         }
         catch(SQLException e){
