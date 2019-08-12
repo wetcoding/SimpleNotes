@@ -1,6 +1,27 @@
-//При загрузке страницы выполняем поиск всех заметок
+/*  При загрузке страницы:
+ *  добавляем событие на Enter в поле ввода
+ *  добавляем слушаетля на очистку поля ввода
+ *  запускаем таймер тймаута
+ *  выполняем поиск всех заметок 
+ */
 window.onload = function() {
-   getNotes("");
+   var searchInput=document.getElementById("searchInput");
+   searchInput.onkeyup=function(event)
+    {
+        event = event || window.event;
+        if (event.keyCode == 0xD)
+        {
+            search();
+            return false;
+        } 
+    };
+   searchInput.oninput=function()
+    {
+        if(searchInput.value=="")
+            search();
+    }; 
+    setInterval(loaderTimeout,1000);
+    getNotes("");
 };
 
 //Поиск
@@ -108,21 +129,32 @@ function updateNotes(){
 //Показать загрузку
 function showLoader(){
     document.getElementById('loader-container').style.display="block";
-    setTimeout(loaderTimeout,5000);
+    console.log("show loader");
 }
 
 //Таймаут, если данные от сервера не были получены
 function loaderTimeout(){
     var loader=document.getElementById('loader-container');
     if(loader.style.display=="block"){
-        closeLoader();
-        alert("Server response timeout");
+        timeout+=1000;
+        if(timeout>4000)
+        {
+            console.log("loader timeout");
+            closeLoader();
+            alert("Server response timeout");
+            timeout=0;
+        }
+    }
+    else
+    {
+        timeout=0;
     }
 }
 
 //Закрыть загрузку
 function closeLoader(){
     document.getElementById('loader-container').style.display="none";
+    console.log("close loader");
 }
 
 //Расчёт длины строки в байтах для UTF-8

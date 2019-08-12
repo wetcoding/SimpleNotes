@@ -6,7 +6,7 @@
 package com.mycompany.simplenotes.database;
 
 /**
- *
+ * Класс для представления записи note в БД
  * @author Mashakaev
  */
 public class Note {
@@ -23,6 +23,7 @@ public class Note {
     public int getId(){
         return id;
     }
+    
     public String getTitle() {
         return title;
     }
@@ -30,6 +31,4 @@ public class Note {
     public String getNote() {
         return note;
     }
-    
-    
 }

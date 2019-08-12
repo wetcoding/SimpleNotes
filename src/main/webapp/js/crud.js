@@ -42,18 +42,18 @@ function dataPost(serverUrl,data) {
             switch (json.status){
                 case "notes":
                     console.log("recieved "+json.notes.length+" notes");
+                    closeLoader();
                     jsonNotes=json.notes;
                     updateNotes();
-                    closeLoader();
                     break;
                 case "success":
                     console.log("sucess operation");
+                    closeLoader();
                     clearSearch();
-                    closeLoader();
                     break;
-                case "error":    
-                    alert(json.message);
+                case "error": 
                     closeLoader();
+                    alert(json.message);
                     break;
             }
                 
